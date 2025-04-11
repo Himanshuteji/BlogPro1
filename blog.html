@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Update Google Sign-In API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com">
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #2c3e50;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --card-bg: #ffffff;
+            --border-color: #e1e1e1;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --input-bg: #f8f9fa;
+            --hover-bg: #f0f7fc;
+            --meta-text-color: #666;
+            --placeholder-color: rgba(44, 62, 80, 0.6);
+            --hover-text-color: #2c3e50;
+            --divider-color: #e1e1e1;
+            --icon-color: #666;
+            --gradient-start: rgba(0, 0, 0, 0.8);
+            --gradient-end: transparent;
+            --button-text: #ffffff;
+            --section-text: #666;
+        }
+
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --primary-color: #ecf0f1;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #ecf0f1;
+            --light-bg: #2c3e50;
+            --dark-bg: #1a252f;
+            --card-bg: #34495e;
+            --border-color: #445566;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --nav-bg: rgba(52, 73, 94, 0.95);
+            --input-bg: #2c3e50;
+            --hover-bg: #2c3e50;
+            --meta-text-color: #a3b1c2;
+            --placeholder-color: rgba(236, 240, 241, 0.6);
+            --hover-text-color: #ffffff;
+            --divider-color: #445566;
+            --icon-color: #a3b1c2;
+            --gradient-start: rgba(26, 37, 47, 0.9);
+            --gradient-end: transparent;
+            --button-text: #ffffff;
+            --section-text: #a3b1c2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Animated Background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background: 
+                linear-gradient(45deg, #2c3e50 25%, transparent 25%) -50px 0,
+                linear-gradient(-45deg, #2c3e50 25%, transparent 25%) -50px 0,
+                linear-gradient(45deg, transparent 75%, #2c3e50 75%) -50px 0,
+                linear-gradient(-45deg, transparent 75%, #2c3e50 75%) -50px 0;
+            background-size: 100px 100px;
+            animation: patternMove 20s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; }
+        }
+
+        /* Navigation Bar Particle Effects */
+        .nav-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        /* Fixed Navigation Bar Styles */
+        nav {
+            background: var(--nav-bg);
+            padding: 1rem;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            backdrop-filter: blur(5px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--secondary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--secondary-color);
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            padding-top: calc(4rem + 64px);  /* navbar height + extra padding */
+            padding-left: 2rem;
+            padding-right: 2rem;
+            padding-bottom: 2rem;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .section-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--section-text);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Enhanced Home Section */
+        #home .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .post-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .post-content p {
+            flex: 1;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .post-card:hover .post-image {
+            transform: scale(1.05);
+        }
+
+        .post-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            color: var(--meta-text-color);
+            font-size: 0.9rem;
+        }
+
+        /* Enhanced Explore Section Styles */
+        .explore-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+            min-height: 200px;
+            position: relative;
+        }
+
+        .explore-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .explore-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .explore-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .explore-item-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+
+        .explore-item-content h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .explore-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .explore-meta i {
+            font-size: 0.8rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            box-shadow: none;
+            margin: 0.25rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, var(--secondary-color), #3498db);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        /* Enhanced Create Section Styles */
+        .create-post-form {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .form-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-step::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border: 3px solid #ddd;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 0.8rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: #ddd;
+            font-size: 1.2rem;
+        }
+
+        .progress-step[data-step="1"]::before {
+            content: '\f15c';  /* File icon */
+        }
+
+        .progress-step[data-step="2"]::before {
+            content: '\f303';  /* Pen icon */
+        }
+
+        .progress-step[data-step="3"]::before {
+            content: '\f06e';  /* Eye icon */
+        }
+
+        .progress-step.active::before {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+            transform: scale(1.2);
+        }
+
+        .progress-step.completed::before {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+            content: '\f00c';  /* Check mark */
+        }
+
+        .progress-step span {
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active span {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #ddd;
+            z-index: 0;
+        }
+
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        /* Image Upload Area */
+        .image-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--input-bg);
+            position: relative;
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--secondary-color);
+            background: var(--hover-bg);
+        }
+
+        .image-upload-area i {
+            font-size: 3rem;
+            color: var(--meta-text-color);
+            margin-bottom: 1rem;
+        }
+
+        .image-upload-area p {
+            color: var(--meta-text-color);
+            margin: 0;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            position: relative;
+            display: none;
+        }
+
+        .image-preview.has-image {
+            display: block;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tags Input */
+        .tags-input {
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-height: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .tag {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .tag i {
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 0.5rem;
+            flex: 1;
+            min-width: 120px;
+            font-size: 0.9rem;
+        }
+
+        /* Post Preview */
+        .post-preview {
+            background: var(--input-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .post-preview h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .button-group button {
+            min-width: 120px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Enhanced Profile Section */
+        .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .profile-header-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        .profile-cover {
+            position: relative;
+        }
+
+        .profile-avatar-wrapper {
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .edit-avatar {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-avatar:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .profile-name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-name-wrapper h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .edit-profile-btn {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .profile-bio {
+            font-size: 1.1rem;
+            color: var(--meta-text-color);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--meta-text-color);
+        }
+
+        .profile-content-grid {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .profile-sidebar {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            width: 300px;
+        }
+
+        .sidebar-card {
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-card h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .profile-data-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .data-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-label {
+            font-size: 0.9rem;
+            color: var(--meta-text-color);
+        }
+
+        .data-value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .interest-tag {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .profile-main-content {
+            flex: 1;
+        }
+
+        .content-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-nav-btn {
+            background: none;
+            border: none;
+            color: var(--meta-text-color);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .content-nav-btn.active {
+            color: var(--secondary-color);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .profile-post-card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-post-card:hover .post-overlay {
+            opacity: 1;
+        }
+
+        .post-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-stats i {
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h1 {
+                font-size: 2rem;
+            }
+
+            #home .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Enhanced Post Cards */
+        .post-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .post-card:hover .post-image {
+            transform: scale(1.05);
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            color: var(--meta-text-color);
+            font-size: 0.9rem;
+        }
+
+        /* Updated Login Container Styles */
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            margin-top: calc(64px + 2rem);
+        }
+
+        .login-container h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        #g_id_onload,
+        .g_id_signin {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #ddd;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Updated form styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        /* Global Button Styles */
+        .btn-login,
+        .filter-btn,
+        .btn,
+        button[type="submit"],
+        button[type="button"] {
+            background: linear-gradient(45deg, var(--secondary-color), #3498db);
+            color: var(--button-text);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Filter Button Specific Styles */
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            box-shadow: none;
+            margin: 0.25rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(45deg, var(--secondary-color), #3498db);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Search Bar Enhancement */
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        /* Remove Image Button Enhancement */
+        .remove-image {
+            background: white;
+            color: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-image:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Tag Related Button Styles */
+        .tag i {
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .tag i:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Global Button Hover Effects */
+        .btn-login:hover,
+        .btn:hover,
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+            background: linear-gradient(45deg, #3498db, var(--secondary-color));
+        }
+
+        /* Global Button Active State */
+        .btn-login:active,
+        .btn:active,
+        button[type="submit"]:active,
+        button[type="button"]:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Icon Styles in Buttons */
+        .btn-login i,
+        .btn i,
+        button[type="submit"] i,
+        button[type="button"] i {
+            margin: 0 8px;
+            font-size: 1.1rem;
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dark mode specific styles */
+        [data-theme="dark"] .bg-pattern {
+            opacity: 0.03;
+        }
+
+        [data-theme="dark"] .form-group label,
+        [data-theme="dark"] .section-header h1 {
+            color: var(--text-color);
+        }
+
+        [data-theme="dark"] ::placeholder {
+            color: rgba(236, 240, 241, 0.6);
+        }
+
+        /* Dark mode specific particle color */
+        [data-theme="dark"] #particleCanvas {
+            opacity: 0.2;
+        }
+
+        /* Add scroll padding to account for fixed navbar */
+        html {
+            scroll-padding-top: 80px;
+            scroll-behavior: smooth;
+        }
+
+        /* Enhance navbar on scroll */
+        nav.scrolled {
+            background: var(--nav-bg);
+            box-shadow: 0 4px 30px var(--shadow-color);
+        }
+
+        /* Update component styles to use variables */
+        .post-meta, 
+        .explore-meta,
+        .profile-data-item,
+        .form-text,
+        small {
+            color: var(--meta-text-color);
+        }
+
+        .section-header p {
+            color: var(--section-text);
+        }
+
+        .explore-item-content {
+            background: linear-gradient(to top, var(--gradient-start), var(--gradient-end));
+        }
+
+        .btn-login,
+        .filter-btn.active,
+        .filter-btn:hover {
+            color: var(--button-text);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--placeholder-color);
+        }
+
+        .image-upload-area p,
+        .image-upload-area i {
+            color: var(--meta-text-color);
+        }
+
+        .profile-info p,
+        .profile-stats span {
+            color: var(--meta-text-color);
+        }
+
+        .profile-stats strong {
+            color: var(--text-color);
+        }
+
+        /* Ensure all transitions are smooth */
+        .post-meta,
+        .explore-meta,
+        .profile-data-item,
+        .form-text,
+        small,
+        input,
+        textarea,
+        select,
+        button,
+        .image-upload-area,
+        .tag,
+        .filter-btn,
+        .section-header p,
+        .profile-info p,
+        .profile-stats span,
+        .profile-stats strong {
+            transition: all 0.3s ease;
+        }
+
+        /* Post Preview Styles */
+        .preview-post {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-content {
+            padding: 2rem;
+        }
+
+        .preview-content h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .preview-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            color: var(--meta-text-color);
+            font-size: 0.9rem;
+        }
+
+        .preview-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preview-meta i {
+            color: var(--secondary-color);
+        }
+
+        .preview-body {
+            color: var(--text-color);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .preview-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-body p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Pattern -->
+    <div class="bg-pattern"></div>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-particles">
+            <canvas id="particleCanvas"></canvas>
+        </div>
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <i class="fas fa-pen-fancy"></i>
+                BlogPro
+            </a>
+            <div class="nav-links">
+                <a href="#home" class="active"><i class="fas fa-home"></i> Home</a>
+                <a href="#explore"><i class="fas fa-compass"></i> Explore</a>
+                <a href="#create"><i class="fas fa-plus-circle"></i> Create</a>
+                <a href="#profile"><i class="fas fa-user"></i> Profile</a>
+                <a href="#login"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading Animation -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Enhanced Home Section -->
+    <div id="home" class="section active">
+    <div class="main-container">
+            <div class="section-header">
+                <h1>Latest Blog Posts</h1>
+                <p>Discover the most recent stories and insights from our community</p>
+            </div>
+        <div class="posts-grid">
+            <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80" alt="Travel image" class="post-image">
+                <div class="post-content">
+                    <h3>Amazing Travel Experience</h3>
+                        <p>Exploring the beautiful landscapes of nature and discovering hidden gems around the world...</p>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 2 hours ago</span>
+                            <span><i class="far fa-heart"></i> 245</span>
+                            <span><i class="far fa-comment"></i> 18</span>
+                        </div>
+                </div>
+            </div>
+            <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Food image" class="post-image">
+                <div class="post-content">
+                    <h3>Food Adventures</h3>
+                        <p>Trying out the local cuisine and experiencing different flavors from around the globe...</p>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 5 hours ago</span>
+                            <span><i class="far fa-heart"></i> 189</span>
+                            <span><i class="far fa-comment"></i> 24</span>
+                        </div>
+                </div>
+            </div>
+            <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80" alt="Tech image" class="post-image">
+                <div class="post-content">
+                    <h3>Tech Innovation</h3>
+                        <p>Latest developments in technology and their impact on our daily lives...</p>
+                        <div class="post-meta">
+                            <span><i class="far fa-clock"></i> 1 day ago</span>
+                            <span><i class="far fa-heart"></i> 324</span>
+                            <span><i class="far fa-comment"></i> 42</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Explore Section -->
+    <div id="explore" class="section">
+        <div class="main-container">
+            <div class="section-header">
+                <h1>Explore Content</h1>
+                <p>Discover amazing content from our creative community</p>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search posts..." id="searchInput">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="travel">Travel</button>
+                <button class="filter-btn" data-category="food">Food</button>
+                <button class="filter-btn" data-category="technology">Technology</button>
+                <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
+            </div>
+
+            <div class="explore-container" id="exploreContainer">
+                <!-- Posts will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Create Section -->
+    <div id="create" class="section">
+        <div class="main-container">
+            <div class="section-header">
+                <h1>Create New Post</h1>
+                <p>Share your story with the world</p>
+            </div>
+            
+            <div class="create-post-form">
+                <div class="form-progress">
+                    <div class="progress-line"></div>
+                    <div class="progress-step active" data-step="1">
+                        <span>Basic Info</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <span>Content</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <span>Preview</span>
+                    </div>
+                </div>
+
+                <form id="createPostForm">
+                    <!-- Step 1: Basic Info -->
+                    <div class="form-step active" data-step="1">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="postTitle">
+                                    <i class="fas fa-heading"></i> Title
+                                </label>
+                                <input type="text" id="postTitle" required placeholder="Enter an engaging title for your post">
+                            </div>
+                            <div class="form-group">
+                                <label for="postCategory">
+                                    <i class="fas fa-folder"></i> Category
+                                </label>
+                                <select id="postCategory" required>
+                                    <option value="">Select a category</option>
+                                    <option value="travel">Travel & Adventure</option>
+                                    <option value="food">Food & Cuisine</option>
+                                    <option value="technology">Technology & Innovation</option>
+                                    <option value="lifestyle">Lifestyle & Wellness</option>
+                                    <option value="art">Art & Culture</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-tags"></i> Tags
+                                </label>
+                                <div class="tags-input" id="tagsContainer">
+                                    <input type="text" class="tag-input" placeholder="Type and press Enter to add tags">
+                                </div>
+                                <small class="form-text">Press Enter or comma to add tags</small>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="button" class="btn-login" onclick="nextStep(1)">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Content -->
+                    <div class="form-step" data-step="2">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="postImage">
+                                    <i class="fas fa-image"></i> Featured Image
+                                </label>
+                                <div class="image-upload-area" id="imageUploadArea">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Drag and drop your image here or click to browse</p>
+                                    <input type="file" id="postImage" accept="image/*" hidden>
+                                </div>
+                                <div class="image-preview" id="imagePreview">
+                                    <button type="button" class="remove-image" onclick="removeImage()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="postContent">
+                                    <i class="fas fa-pen-fancy"></i> Content
+                                </label>
+                                <textarea id="postContent" required 
+                                    placeholder="Write your amazing story here..."></textarea>
+                                <small class="form-text">Markdown formatting is supported</small>
+                            </div>
+                        </div>
+                        <div class="button-group">
+                            <button type="button" class="btn-login" onclick="prevStep(2)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn-login" onclick="nextStep(2)">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Preview -->
+                    <div class="form-step" data-step="3">
+                        <div class="post-preview">
+                            <h3>Preview Your Post</h3>
+                            <div id="postPreview" class="preview-content"></div>
+                        </div>
+                        <div class="button-group">
+                            <button type="button" class="btn-login" onclick="prevStep(3)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="submit" class="btn-login">
+                                <i class="fas fa-paper-plane"></i> Publish Post
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Updated Login Section -->
+    <div class="login-container" id="login" style="display: none;">
+        <h2>Welcome Back</h2>
+        
+        <!-- Google Sign-In Button -->
+        <div id="g_id_onload"
+             data-client_id="1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left">
+        </div>
+
+        <div class="divider">
+            <span>or continue with email</span>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="email" id="username" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn-login">Log In</button>
+        </form>
+    </div>
+
+    <!-- Enhanced Profile Section -->
+    <div id="profile" class="section">
+        <div class="main-container">
+            <div class="profile-wrapper">
+                <!-- Profile Header Card -->
+                <div class="profile-header-card">
+                    <div class="profile-cover">
+                        <div class="profile-avatar-wrapper">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80" 
+                                alt="Profile" 
+                                class="profile-avatar" 
+                                id="userAvatar">
+                            <button class="edit-avatar">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name-wrapper">
+                            <h2 id="userName">Loading...</h2>
+                            <button class="edit-profile-btn">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                        </div>
+                        <p class="profile-bio" id="userBio">Loading bio...</p>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Posts</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Followers</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value">0</span>
+                                <span class="stat-label">Following</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Content Grid -->
+                <div class="profile-content-grid">
+                    <!-- Sidebar -->
+                    <div class="profile-sidebar">
+                        <div class="sidebar-card">
+                            <h3>About</h3>
+                            <div class="profile-data-list">
+                                <div class="profile-data-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <div class="data-content">
+                                        <span class="data-label">Email</span>
+                                        <span class="data-value" id="userEmail">Loading email...</span>
+                                    </div>
+                                </div>
+                                <div class="profile-data-item">
+                                    <i class="fas fa-globe"></i>
+                                    <div class="data-content">
+                                        <span class="data-label">Location</span>
+                                        <span class="data-value" id="userLocation">Loading location...</span>
+                                    </div>
+                                </div>
+                                <div class="profile-data-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <div class="data-content">
+                                        <span class="data-label">Joined</span>
+                                        <span class="data-value" id="userJoinDate">Loading join date...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h3>Interests</h3>
+                            <div class="interest-tags">
+                                <span class="interest-tag">Technology</span>
+                                <span class="interest-tag">Travel</span>
+                                <span class="interest-tag">Photography</span>
+                                <span class="interest-tag">Writing</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="profile-main-content">
+                        <!-- Content Navigation -->
+                        <div class="content-nav">
+                            <button class="content-nav-btn active" data-tab="posts">
+                                <i class="fas fa-th"></i> Posts
+                            </button>
+                            <button class="content-nav-btn" data-tab="saved">
+                                <i class="fas fa-bookmark"></i> Saved
+                            </button>
+                            <button class="content-nav-btn" data-tab="liked">
+                                <i class="fas fa-heart"></i> Liked
+                            </button>
+                        </div>
+
+                        <!-- Posts Grid -->
+                        <div class="posts-grid" id="userPosts">
+                            <!-- Sample Post Card -->
+                            <div class="profile-post-card">
+                                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80" 
+                                     alt="Post Image">
+                                <div class="post-overlay">
+                                    <div class="post-stats">
+                                        <span><i class="fas fa-heart"></i> 245</span>
+                                        <span><i class="fas fa-comment"></i> 18</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- More post cards will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const logo = document.querySelector('.logo');
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Initialize theme
+        if (isDarkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Toggle theme function
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            
+            // Update particle colors
+            particles.forEach(particle => {
+                particle.color = isDarkMode ? '#ecf0f1' : '#3498db';
+            });
+        }
+
+        // Add click event to logo
+        logo.addEventListener('click', toggleTheme);
+
+        // Particle Animation
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        // Set canvas size
+        function resizeCanvas() {
+            const nav = document.querySelector('nav');
+            canvas.width = nav.offsetWidth;
+            canvas.height = nav.offsetHeight;
+        }
+        
+        // Create particle class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = '#3498db';
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+        
+        // Initialize particles
+        function init() {
+            particles = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 8000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        // Animate particles
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Update and draw particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            init();
+        });
+        
+        // Start animation
+        resizeCanvas();
+        init();
+        animate();
+
+        // Enhanced Navigation
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('.section');
+        const loading = document.querySelector('.loading');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+            e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                
+                // Show loading animation
+                loading.classList.add('active');
+                
+                // Update active states
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Simulate loading delay for smooth transition
+                setTimeout(() => {
+                    // Show/hide sections
+                    sections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                    
+                    // Hide loading animation
+                    loading.classList.remove('active');
+                }, 500);
+
+                // Special handling for login
+            const loginContainer = document.querySelector('.login-container');
+                if (targetId === 'login') {
+                loginContainer.style.display = 'block';
+            } else {
+                loginContainer.style.display = 'none';
+            }
+            });
+        });
+
+        // Sample explore posts data
+        const explorePosts = [
+            {
+                id: 1,
+                title: 'Amazing Mountain Trek',
+                category: 'travel',
+                image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80',
+                author: 'John Doe',
+                date: '2 days ago',
+                likes: 245
+            },
+            {
+                id: 2,
+                title: 'Delicious Italian Cuisine',
+                category: 'food',
+                image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80',
+                author: 'Jane Smith',
+                date: '3 days ago',
+                likes: 189
+            },
+            {
+                id: 3,
+                title: 'Future of AI',
+                category: 'technology',
+                image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+                author: 'Mike Johnson',
+                date: '1 week ago',
+                likes: 324
+            },
+            {
+                id: 4,
+                title: 'Mindful Living',
+                category: 'lifestyle',
+                image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
+                author: 'Sarah Williams',
+                date: '5 days ago',
+                likes: 156
+            }
+        ];
+
+        // Explore Section Functionality
+        function renderExplorePosts(posts) {
+            const container = document.getElementById('exploreContainer');
+            container.innerHTML = '';
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'explore-item';
+                postElement.innerHTML = `
+                    <img src="${post.image}" alt="${post.title}">
+                    <div class="explore-item-content">
+                        <h3>${post.title}</h3>
+                        <div class="explore-meta">
+                            <span><i class="fas fa-user"></i> ${post.author}</span>
+                            <span><i class="fas fa-clock"></i> ${post.date}</span>
+                            <span><i class="fas fa-heart"></i> ${post.likes}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(postElement);
+            });
+        }
+
+        // Initialize explore posts
+        renderExplorePosts(explorePosts);
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.dataset.category;
+                const filteredPosts = category === 'all' 
+                    ? explorePosts 
+                    : explorePosts.filter(post => post.category === category);
+                
+                renderExplorePosts(filteredPosts);
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredPosts = explorePosts.filter(post => 
+                post.title.toLowerCase().includes(searchTerm) ||
+                post.author.toLowerCase().includes(searchTerm)
+            );
+            renderExplorePosts(filteredPosts);
+        });
+
+        // Create Post Enhanced Functionality
+        let currentStep = 1;
+        const tags = new Set();
+
+        function validateStep(step) {
+            if (step === 1) {
+                const title = document.getElementById('postTitle').value.trim();
+                const category = document.getElementById('postCategory').value;
+                
+                if (!title) {
+                    alert('Please enter a title for your post');
+                    return false;
+                }
+                if (!category) {
+                    alert('Please select a category');
+                    return false;
+                }
+                return true;
+            }
+            if (step === 2) {
+                const content = document.getElementById('postContent').value.trim();
+                if (!content) {
+                    alert('Please write some content for your post');
+                    return false;
+                }
+                return true;
+            }
+            return true;
+        }
+
+        function nextStep(step) {
+            if (validateStep(step)) {
+                document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
+                document.querySelector(`.form-step[data-step="${step + 1}"]`).classList.add('active');
+                document.querySelector(`.progress-step[data-step="${step}"]`).classList.add('completed');
+                document.querySelector(`.progress-step[data-step="${step + 1}"]`).classList.add('active');
+                currentStep = step + 1;
+                
+                if (currentStep === 3) {
+                    updatePreview();
+                }
+                
+                // Smooth scroll to top of form
+                document.querySelector('.create-post-form').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function prevStep(step) {
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.form-step[data-step="${step - 1}"]`).classList.add('active');
+            document.querySelector(`.progress-step[data-step="${step}"]`).classList.remove('active');
+            document.querySelector(`.progress-step[data-step="${step - 1}"]`).classList.add('active');
+            currentStep = step - 1;
+            
+            // Smooth scroll to top of form
+            document.querySelector('.create-post-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Enhanced Tags Functionality
+        const tagsContainer = document.getElementById('tagsContainer');
+        const tagInput = tagsContainer.querySelector('.tag-input');
+
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+                const tag = this.value.trim().toLowerCase();
+                if (tag && !tags.has(tag) && tags.size < 5) {
+                    addTag(tag);
+                    this.value = '';
+                } else if (tags.size >= 5) {
+                    alert('Maximum 5 tags allowed');
+                }
+            }
+        });
+
+        function addTag(tag) {
+            tags.add(tag);
+            const tagElement = document.createElement('div');
+            tagElement.className = 'tag';
+            tagElement.innerHTML = `
+                ${tag}
+                <i class="fas fa-times" onclick="removeTag('${tag}')"></i>
+            `;
+            tagsContainer.insertBefore(tagElement, tagInput);
+        }
+
+        function removeTag(tag) {
+            tags.delete(tag);
+            const tagElements = tagsContainer.getElementsByClassName('tag');
+            for (let element of tagElements) {
+                if (element.textContent.trim() === tag) {
+                    element.remove();
+                    break;
+                }
+            }
+        }
+
+        // Enhanced Image Upload Functionality
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const imageInput = document.getElementById('postImage');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageUploadArea.addEventListener('click', () => imageInput.click());
+        imageUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageUploadArea.style.borderColor = '#3498db';
+            imageUploadArea.style.backgroundColor = '#f0f7fc';
+        });
+
+        imageUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            imageUploadArea.style.borderColor = '#e1e1e1';
+            imageUploadArea.style.backgroundColor = '#f8f9fa';
+        });
+
+        imageUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageUpload(file);
+            }
+        });
+
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleImageUpload(file);
+            }
+        });
+
+        function handleImageUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button type="button" class="remove-image" onclick="removeImage()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                imagePreview.classList.add('has-image');
+                imageUploadArea.style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            imageInput.value = '';
+            imagePreview.innerHTML = '';
+            imagePreview.classList.remove('has-image');
+            imageUploadArea.style.display = 'block';
+        }
+
+        // Enhanced Preview Functionality
+        function updatePreview() {
+            const title = document.getElementById('postTitle').value;
+            const category = document.getElementById('postCategory').value;
+            const content = document.getElementById('postContent').value;
+            const imagePreview = document.getElementById('imagePreview').querySelector('img');
+            
+            const formattedContent = content.split('\n')
+                .filter(paragraph => paragraph.trim() !== '')
+                .map(paragraph => `<p>${paragraph}</p>`)
+                .join('');
+            
+            document.getElementById('postPreview').innerHTML = `
+                <div class="preview-post">
+                    ${imagePreview ? `
+                    <div class="preview-image">
+                        <img src="${imagePreview.src}" alt="${title}">
+                    </div>
+                    ` : ''}
+                    <div class="preview-content">
+                        <h2>${title}</h2>
+                        <div class="preview-meta">
+                            <span>
+                                <i class="fas fa-folder"></i>
+                                ${category}
+                            </span>
+                            ${Array.from(tags).length > 0 ? `
+                            <span>
+                                <i class="fas fa-tags"></i>
+                                ${Array.from(tags).join(', ')}
+                            </span>
+                            ` : ''}
+                            <span>
+                                <i class="far fa-clock"></i>
+                                ${new Date().toLocaleDateString()}
+                            </span>
+                        </div>
+                        <div class="preview-body">
+                            ${formattedContent}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Form submission with validation
+        document.getElementById('createPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateStep(1) || !validateStep(2)) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('postTitle').value.trim());
+            formData.append('category', document.getElementById('postCategory').value);
+            formData.append('content', document.getElementById('postContent').value.trim());
+            formData.append('tags', Array.from(tags));
+            
+            const imageFile = document.getElementById('postImage').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
+            // Show loading state
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+            submitButton.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                alert('Post created successfully!');
+                this.reset();
+                tags.clear();
+                document.querySelectorAll('.tag').forEach(tag => tag.remove());
+                removeImage();
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+                showSection('home');
+            }, 2000);
+        });
+
+        // Updated Google OAuth Configuration and Handling
+        function handleCredentialResponse(response) {
+            // Decode the credential response
+            const credential = response.credential;
+            const payload = parseJwt(credential);
+            
+            // Make API call to your backend to verify the token
+            verifyGoogleToken(credential)
+                .then(userData => {
+                    // Update UI with user data
+                    updateProfile(userData);
+                    
+                    // Store auth data
+                    localStorage.setItem('authToken', credential);
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    
+                    // Hide login and show profile
+                    document.querySelector('.login-container').style.display = 'none';
+                    showSection('profile');
+                    
+                    // Update nav menu
+                    updateNavMenu(true);
+                })
+                .catch(error => {
+                    console.error('Authentication failed:', error);
+                    alert('Authentication failed. Please try again.');
+                });
+        }
+
+        // Verify Google token with backend
+        async function verifyGoogleToken(token) {
+            try {
+                const payload = parseJwt(token);
+                // In a real application, you would verify the token with your backend
+                // For demo purposes, we'll create a user object from the token payload
+                return {
+                    id: payload.sub,
+                    name: payload.name,
+                    email: payload.email,
+                    avatar: payload.picture,
+                    bio: 'Welcome to my blog!',
+                    location: 'Not specified',
+                    joinDate: new Date().toLocaleDateString()
+                };
+            } catch (error) {
+                throw new Error('Token verification failed');
+            }
+        }
+
+        // Parse JWT token
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error parsing JWT:', error);
+                return {};
+            }
+        }
+
+        // Update navigation menu based on auth state
+        function updateNavMenu(isAuthenticated) {
+            const loginLink = document.querySelector('a[href="#login"]');
+            if (isAuthenticated) {
+                loginLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+                loginLink.onclick = (e) => {
+                    e.preventDefault();
+                    logout();
+                };
+            } else {
+                loginLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                loginLink.onclick = null;
+            }
+        }
+
+        // Enhanced logout functionality
+        function logout() {
+            // Clear auth data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            
+            // Update UI
+            updateNavMenu(false);
+            showSection('home');
+            
+            // Reset profile data
+            updateProfile({
+                name: '',
+                email: '',
+                avatar: '',
+                bio: '',
+                location: '',
+                joinDate: ''
+            });
+            
+            // Show success message
+            alert('Logged out successfully');
+        }
+
+        // Check for existing session on page load
+        window.addEventListener('load', function() {
+            const authToken = localStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData');
+            
+            if (authToken && userData) {
+                try {
+                    const payload = parseJwt(authToken);
+                    // Check if token is expired
+                    const expirationTime = payload.exp * 1000; // Convert to milliseconds
+                    
+                    if (Date.now() >= expirationTime) {
+                        console.log('Token expired, logging out...');
+                        logout();
+                        return;
+                    }
+                    
+                    // Restore session
+                    updateProfile(JSON.parse(userData));
+                    updateNavMenu(true);
+                } catch (error) {
+                    console.error('Error restoring session:', error);
+                    logout();
+                }
+            }
+        });
+
+        // Regular login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Here you would typically handle regular login
+            alert('Regular login - Email: ' + email);
+            
+            // For demo, update profile with form data
+            updateProfile({
+                name: email.split('@')[0],
+                email: email,
+                avatar: 'https://ui-avatars.com/api/?name=' + email.split('@')[0],
+                bio: 'Welcome to my blog!',
+                location: 'Not specified',
+                joinDate: new Date().toLocaleDateString()
+            });
+
+            // Hide login and show profile
+            document.querySelector('.login-container').style.display = 'none';
+            showSection('profile');
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('nav');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            // Add scrolled class when page is scrolled
+            if (currentScroll > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Profile Page Functionality
+        const contentNavBtns = document.querySelectorAll('.content-nav-btn');
+        const editProfileBtn = document.querySelector('.edit-profile-btn');
+        const editAvatarBtn = document.querySelector('.edit-avatar');
+
+        // Handle content navigation
+        contentNavBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                contentNavBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Here you would typically load different content based on the tab
+                const tab = btn.dataset.tab;
+                loadProfileContent(tab);
+            });
+        });
+
+        // Simulate loading different content
+        function loadProfileContent(tab) {
+            const postsGrid = document.getElementById('userPosts');
+            postsGrid.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                if (tab === 'posts') {
+                    renderUserPosts();
+                } else if (tab === 'saved') {
+                    renderSavedPosts();
+                } else if (tab === 'liked') {
+                    renderLikedPosts();
+                }
+            }, 1000);
+        }
+
+        // Sample post data
+        const samplePosts = [
+            {
+                id: 1,
+                image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
+                likes: 245,
+                comments: 18
+            },
+            {
+                id: 2,
+                image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80',
+                likes: 189,
+                comments: 24
+            },
+            {
+                id: 3,
+                image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80',
+                likes: 324,
+                comments: 42
+            }
+        ];
+
+        // Render user posts
+        function renderUserPosts() {
+            const postsGrid = document.getElementById('userPosts');
+            postsGrid.innerHTML = samplePosts.map(post => `
+                <div class="profile-post-card">
+                    <img src="${post.image}" alt="Post Image">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <span><i class="fas fa-heart"></i> ${post.likes}</span>
+                            <span><i class="fas fa-comment"></i> ${post.comments}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render saved posts
+        function renderSavedPosts() {
+            const postsGrid = document.getElementById('userPosts');
+            postsGrid.innerHTML = '<p class="no-content">No saved posts yet.</p>';
+        }
+
+        // Render liked posts
+        function renderLikedPosts() {
+            const postsGrid = document.getElementById('userPosts');
+            postsGrid.innerHTML = '<p class="no-content">No liked posts yet.</p>';
+        }
+
+        // Handle edit profile button
+        editProfileBtn.addEventListener('click', () => {
+            // Here you would typically show a modal or navigate to edit profile page
+            alert('Edit profile functionality will be implemented here');
+        });
+
+        // Handle edit avatar button
+        editAvatarBtn.addEventListener('click', () => {
+            // Here you would typically show file picker
+            alert('Avatar upload functionality will be implemented here');
+        });
+
+        // Initialize profile page
+        renderUserPosts();
+    </script>
+</body>
+</html>
